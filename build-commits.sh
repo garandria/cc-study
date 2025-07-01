@@ -4,6 +4,13 @@ SRC=$(realpath ${1})
 VER=${2}
 OUT=${3}
 
+if [[ $CCACHE == 1 ]] ; then
+    export path PATH=/usr/lib/ccache:${PATH}
+    ccache -M 0			# No size limit
+    ccache -Ccz			# Clean up the cache and stats
+fi
+
+
 mkdir -p ${OUT}
 OUT=$(realpath ${3})
 size=${4} # 500
@@ -38,6 +45,9 @@ paste -d ' ' <(seq -w ${size}) <(git rev-list --max-count=${size} HEAD | tac) | 
 	echo $? > ${exstat}
 	if [ -f ${bin} ] ; then
 	    cp ${bin} ${binary}
+	fi
+	if [[ $CCACHE == 1 ]] ; then
+	    ccache -svv > ${path}.ccache-stats
 	fi
 	git clean -dfx
     done
