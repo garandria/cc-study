@@ -2,9 +2,10 @@
 
 SRC=$(realpath ${1})
 VER=${2}
-OUT=$(realpath ${3})
+OUT=${3}
 
 mkdir -p ${OUT}
+OUT=$(realpath ${3})
 size=${4} # 500
 
 if [[ ${SRC} == *linux* ]] ; then
