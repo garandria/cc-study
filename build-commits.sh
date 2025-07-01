@@ -19,6 +19,7 @@ elif [[ ${SRC} == *busybox* ]] ; then
 fi
 
 pushd ${SRC}
+git config --global --add safe.directory $(pwd)
 git checkout ${VER}
 paste -d ' ' <(seq -w ${size}) <(git rev-list --max-count=${size} HEAD | tac) | \
     while read -r line ; do
