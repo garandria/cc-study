@@ -36,7 +36,9 @@ paste -d ' ' <(seq -w ${size}) <(git rev-list --max-count=${size} HEAD | tac) | 
 	binary=${path}.bin
 	${env} /usr/bin/time -pq -o ${time} make -j $nproc 1>${stdout} 2>${stderr}
 	echo $? > ${exstat}
-	cp ${bin} ${binary}
+	if [ -f ${bin} ] ; then
+	    cp ${bin} ${binary}
+	fi
 	git clean -dfx
     done
 popd
