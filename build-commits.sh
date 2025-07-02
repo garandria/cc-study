@@ -5,6 +5,7 @@ VER=${2}
 OUT=${3}
 
 if [[ $CCACHE == 1 ]] ; then
+    echo "* ccache is enabled"
     export path PATH=/usr/lib/ccache:${PATH}
     ccache -M 0			# No size limit
     ccache -Ccz			# Clean up the cache and stats
