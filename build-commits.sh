@@ -18,13 +18,15 @@ size=${4} # 500
 
 if [[ ${SRC} == *linux* ]] ; then
     bin="vmlinux"
-    env='KBUILD_BUILD_TIMESTAMP="Sun Jan 1 01:00:00 UTC 2023" KBUILD_BUILD_USER="user" KBUILD_BUILD_HOST="host" KBUILD_BUILD_VERSION="1"'
+    export KBUILD_BUILD_TIMESTAMP="Sun Jan 1 01:00:00 UTC 2023"
+    export KBUILD_BUILD_USER="user"
+    export KBUILD_BUILD_HOST="host"
+    export KBUILD_BUILD_VERSION="1"
 elif [[ ${SRC} == *toybox* ]] ; then
     bin="toybox"
-    env=''
 elif [[ ${SRC} == *busybox* ]] ; then
     bin="busybox"
-    env='KCONFIG_NOTIMESTAMP=1'
+    export KCONFIG_NOTIMESTAMP=1
 fi
 
 pushd ${SRC}
