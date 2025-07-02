@@ -38,6 +38,9 @@ paste -d ' ' <(seq -w ${size}) <(git rev-list --max-count=${size} HEAD | tac) | 
 	commit=$(echo ${line} | cut -d ' ' -f2)
 	git checkout ${commit}
 	make defconfig
+	if [[ ${bin} == "busybox" ]] ; then
+	    sed -i 's/CONFIG_TC=y/# CONFIG_TC is not set/g' .config
+	fi
 	path=${OUT}/${lineno}
 	time=${path}.time
 	stdout=${path}.stdout
