@@ -1,16 +1,20 @@
 #!/bin/bash
 
-SRC=$(realpath ${1})
-VER=${2}
-OUT=${3}
-
 if [[ $CCACHE == 1 ]] ; then
     echo "* ccache is enabled"
     export path PATH=/usr/lib/ccache:${PATH}
     ccache -M 0			# No size limit
     ccache -Ccz			# Clean up the cache and stats
+else
+    if [[ ${SANITY_CHECK} == 1 ]] ; then
+	echo "CCACHE=1 is needed with SANITY_CHECK=1"
+	exit 1
+    fi
 fi
 
+SRC=$(realpath ${1})
+VER=${2}
+OUT=${3}
 
 mkdir -p ${OUT}
 OUT=$(realpath ${3})
