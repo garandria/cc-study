@@ -57,4 +57,35 @@ paste -d ' ' <(seq -w ${size}) <(git rev-list --max-count=${size} HEAD | tac) | 
 	fi
 	git clean -dfx
     done
+
+if [[ ${SANITY_CHECK} == 1 ]] ; then
+    git checkout ${VER}
+    paste -d ' ' <(seq -w ${size}) <(git rev-list --max-count=${size} HEAD | tac) | \
+	while read -r line ; do
+	    lineno=$(echo ${line} | cut -d ' ' -f1)
+	    commit=$(echo ${line} | cut -d ' ' -f2)
+	    git checkout ${commit}
+	    make defconfig
+	    if [[ ${bin} == "busybox" ]] ; then
+		sed -i 's/CONFIG_TC=y/# CONFIG_TC is not set/g' .config
+	    fi
+	    path=${OUT}/${lineno}
+	    time=${path}.time.2
+	    stdout=${path}.stdout.2
+	    stderr=${path}.stderr.2
+	    exstat=${path}.exitstatus.2
+	    binary=${path}.bin.2
+	    ${env} /usr/bin/time -pq -o ${time} make -j $nproc 1>${stdout} 2>${stderr}
+	    echo $? > ${exstat}
+	    if [ -f ${bin} ] ; then
+		cp ${bin} ${binary}
+	    fi
+	    if [[ $CCACHE == 1 ]] ; then
+		ccache -svv > ${path}.ccache-stats.2
+	    fi
+	    git clean -dfx
+	done
+fi
+
+
 popd
