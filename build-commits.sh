@@ -41,6 +41,9 @@ paste -d ' ' <(seq -w ${size}) <(git rev-list --max-count=${size} HEAD | tac) | 
 	if [[ ${bin} == "busybox" ]] ; then
 	    sed -i 's/CONFIG_TC=y/# CONFIG_TC is not set/g' .config
 	fi
+	cp .config /tmp
+	git clean -dfx
+	cp /tmp/.config .config
 	path=${OUT}/${lineno}
 	time=${path}.time
 	stdout=${path}.stdout
