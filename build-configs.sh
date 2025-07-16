@@ -19,6 +19,7 @@ OUT=${3}
 mkdir -p ${OUT}
 OUT=$(realpath ${3})
 size=${4} # 500
+CONFIGS=${5}
 
 if [[ ${SRC} == *linux* ]] ; then
     bin="vmlinux"
@@ -354,14 +355,15 @@ pushd ${SRC}
 git config --global --add safe.directory $(pwd)
 git checkout ${VER}
 for i in $(seq -w ${size}) ; do
-    if [[ ${bin} == "vmlinux" ]] ; then
-	linux_randconfig
-    elif [[ ${bin} == "toybox" ]] ; then
-	toybox_randconfig
-    elif [[ ${bin} == "busybox" ]] ; then
-	busybox_randconfig
-	sed -i 's/CONFIG_TC=y/# CONFIG_TC is not set/g' .config
-    fi
+    # if [[ ${bin} == "vmlinux" ]] ; then
+    # 	linux_randconfig
+    # elif [[ ${bin} == "toybox" ]] ; then
+    # 	toybox_randconfig
+    # elif [[ ${bin} == "busybox" ]] ; then
+    # 	busybox_randconfig
+    # 	sed -i 's/CONFIG_TC=y/# CONFIG_TC is not set/g' .config
+    # fi
+    cp ${CONFIGS}/${i}.config .config
     path=${OUT}/${i}
     time=${path}.time
     stdout=${path}.stdout
