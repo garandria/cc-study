@@ -19,7 +19,7 @@ OUT=${3}
 mkdir -p ${OUT}
 OUT=$(realpath ${3})
 size=${4} # 500
-CONFIGS=${5}
+CONFIGS=$(realpath ${5})
 
 if [[ ${SRC} == *linux* ]] ; then
     bin="vmlinux"
