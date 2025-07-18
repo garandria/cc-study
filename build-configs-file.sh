@@ -46,6 +46,7 @@ for confto in ${CONFIGS}/* ; do
     # 	busybox_randconfig
     # 	sed -i 's/CONFIG_TC=y/# CONFIG_TC is not set/g' .config
     # fi
+    i=$(echo ${confto} | cut -d. -f1)
     cp ${confto} .config
     path=${OUT}/${i}
     time=${path}.time
